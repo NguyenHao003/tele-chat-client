@@ -10,8 +10,10 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<ChatPage />} path={ROUTES.HOME} />
       <Route element={<ChatPage />} path={ROUTES.CHAT} />
+      <Route element={<ChatPage />} path={`${ROUTES.CHAT}/:roomId`} />
       <Route element={<LoginPage />} path={ROUTES.LOGIN} />
       <Route element={<NotFoundPage />} path='*' />
     </Routes>
+
   )
 }

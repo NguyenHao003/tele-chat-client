@@ -6,7 +6,7 @@ export type RoomType = 'direct' | 'group'
 export type RoomMember = {
   id: string
   roomId?: string
-  userId: string
+  userId?: string
   user: User
   joinedAt?: string
 }
@@ -19,7 +19,7 @@ export type Room = {
   members: RoomMember[]
   createdAt: string
   updatedAt?: string
-  lastMessage?: Pick<ChatMessage, 'id' | 'content' | 'createdAt' | 'type'> | null
+  lastMessage?: Pick<ChatMessage, 'id' | 'content' | 'createdAt' | 'type' | 'senderId'> | null
 }
 
 export type SearchConversationItem = {

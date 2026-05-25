@@ -3,7 +3,7 @@ export type User = {
   username: string
   email?: string
   avatar?: string | null
-  isOnline: boolean
+  isOnline?: boolean
   createdAt?: string
   updatedAt?: string
 }

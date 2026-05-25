@@ -79,3 +79,34 @@ input {
     linear-gradient(-35deg, transparent 0 44%, #46745b 45% 47%, transparent 48%);
   background-size: 88px 88px, 96px 96px, 72px 72px, 80px 80px;
 }
+
+.message-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0 0 0 / 0.28) transparent;
+}
+
+.message-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.message-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.28);
+}
+
+.message-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(0 0 0 / 0.38);
+}
+
+.textarea-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.textarea-scrollbar::-webkit-scrollbar {
+  display: none;
+}
