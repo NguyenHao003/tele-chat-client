@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 
 import { MessagePanel } from '@/modules/message/components/message-panel'
 import { useGetInfiniteMessages } from '@/modules/message/hooks/use-get-infinite-messages'
+import { useMessageRealtime } from '@/modules/message/hooks/use-message-realtime'
 import { RoomList } from '@/modules/room/components/room-list'
 import { RoomSearchPanel } from '@/modules/room/components/room-search-panel'
 import { RoomSidebarHeader } from '@/modules/room/components/room-sidebar-header'
@@ -16,6 +17,8 @@ export default function ChatRoutePage() {
   const currentUserId = getCurrentUserId()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+
+  useMessageRealtime(selectedRoomId)
 
   const activeRoom = roomsData.find((room) => room.id === selectedRoomId)
 

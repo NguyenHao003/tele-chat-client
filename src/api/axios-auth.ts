@@ -6,7 +6,6 @@ import { getAccessToken, removeAccessToken } from '@/helpers/auth-token'
 
 const axiosAuth = axios.create({
   baseURL: `${ENV.API_URL}/api`,
-  withCredentials: true
 })
 
 axiosAuth.interceptors.request.use((config) => {

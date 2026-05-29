@@ -1,7 +1,14 @@
 import { Send, Mic, Paperclip, Smile } from 'lucide-react'
-import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent
+} from 'react'
 
 import { useCreateMessage } from '@/modules/message/hooks/use-create-message'
+import { getMessageSocket } from '../apis/socket'
 
 type MessageInputProps = {
   roomId: string
@@ -10,7 +17,8 @@ type MessageInputProps = {
 export function MessageInput({ roomId }: MessageInputProps) {
   const [content, setContent] = useState('')
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const { createMessage, isPending } = useCreateMessage()
+  // const { createMessage, isPending } = useCreateMessage()
+  const [isSending, setIsSending] = useState(false)
 
   useEffect(() => {
     const input = inputRef.current
@@ -27,27 +35,44 @@ export function MessageInput({ roomId }: MessageInputProps) {
     event.preventDefault()
 
     const trimmedContent = content.trim()
-    if (!trimmedContent || isPending) {
+    if (!trimmedContent || isSending) {
       return
     }
 
     setContent('')
     requestAnimationFrame(() => inputRef.current?.focus())
 
-    createMessage(
-      {
-        roomId,
-        content: trimmedContent,
-      },
-      {
-        onError: () => {
-          setContent((currentContent) => currentContent || trimmedContent)
-        },
-        onSettled: () => {
-          requestAnimationFrame(() => inputRef.current?.focus())
-        },
-      },
-    )
+    // createMessage(
+    //   {
+    //     roomId,
+    //     content: trimmedContent
+    //   },
+    //   {
+    //     onError: () => {
+    //       setContent((currentContent) => currentContent || trimmedContent)
+    //     },
+    //     onSettled: () => {
+    //       requestAnimationFrame(() => inputRef.current?.focus())
+    //     }
+    //   }
+    // )
+    const socket = getMessageSocket()
+
+    if (!socket.connected) {
+      socket.connect()
+    }
+
+    setIsSending(true)
+
+    socket.emit('sendMessage', {
+      roomId,
+      content: trimmedContent,
+      type: 'TEXT'
+    })
+
+    setIsSending(false)
+
+    requestAnimationFrame(() => inputRef.current?.focus())
   }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -85,10 +110,14 @@ export function MessageInput({ roomId }: MessageInputProps) {
       <Smile className='mb-1.5 size-6 shrink-0 text-[#8b8f93]' />
       <button
         className='grid size-9 place-items-center rounded-full text-[#8b8f93] hover:bg-[#f1f3f4] hover:text-[#3390ec]'
-        disabled={!content.trim() || isPending}
+        disabled={!content.trim() || isSending}
         type='submit'
       >
-        {content.trim() ? <Send className='size-5' /> : <Mic className='size-5' />}
+        {content.trim() ? (
+          <Send className='size-5' />
+        ) : (
+          <Mic className='size-5' />
+        )}
       </button>
     </form>
   )
