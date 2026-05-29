@@ -5,7 +5,8 @@ import { ROUTES } from '@/enums/routes'
 import { getAccessToken, removeAccessToken } from '@/helpers/auth-token'
 
 const axiosAuth = axios.create({
-  baseURL: ENV.API_URL,
+  baseURL: `${ENV.API_URL}/api`,
+  withCredentials: true
 })
 
 axiosAuth.interceptors.request.use((config) => {
@@ -30,7 +31,7 @@ axiosAuth.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  },
+  }
 )
 
 export default axiosAuth
