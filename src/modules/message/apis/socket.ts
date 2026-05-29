@@ -8,6 +8,7 @@ type ServerToClientEvents = {
   joinedRoom: (data: { roomId: string }) => void
   messageCreated: (message: ChatMessage) => void
   newMessage: (message: ChatMessage) => void
+  roomUpdated: (message: ChatMessage) => void
 }
 
 type ClientToServerEvents = {

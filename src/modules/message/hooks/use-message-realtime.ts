@@ -54,10 +54,6 @@ export function useMessageRealtime(roomId: string | null) {
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    if (!roomId) {
-      return
-    }
-
     const socket = getMessageSocket()
 
     socket.on('connect', () => {
@@ -84,10 +80,19 @@ export function useMessageRealtime(roomId: string | null) {
       })
     }
 
+    const handleRoomUpdated = () => {
+      queryClient.invalidateQueries({
+        queryKey: ROOM_QUERY_KEYS.list
+      })
+    }
+
+    socket.on('roomUpdated', handleRoomUpdated)
+
     socket.on('messageCreated', handleMessageCreated)
 
     return () => {
       socket.off('messageCreated', handleMessageCreated)
+      socket.off('roomUpdated', handleRoomUpdated)
     }
   }, [queryClient, roomId])
 }
